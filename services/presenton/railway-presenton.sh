@@ -30,7 +30,7 @@ export AUTH_USERNAME="$user"
 
 pw="${AUTH_PASSWORD:-}"
 if [ "${#pw}" -lt 8 ] || [ "${#pw}" -gt 128 ]; then
-  warn "AUTH_PASSWORD must be 8-128 characters. The login stays locked with a random password nobody knows; set a valid AUTH_PASSWORD and redeploy to unlock it."
+  warn "AUTH_PASSWORD must be 8-128 characters; it is ignored. An existing admin keeps the current password; on a first start the login is locked with a random password nobody knows. Set a valid AUTH_PASSWORD and redeploy: it is then applied once."
   export AUTH_PASSWORD="$(head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n')"
   # Keep the env override off for this boot: the random value must not replace a working login.
   export AUTH_OVERRIDE_FROM_ENV=false RESET_AUTH=false
