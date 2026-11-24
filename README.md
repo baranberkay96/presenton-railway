@@ -1,5 +1,7 @@
 # Deploy and Host Presenton with Railway
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/presenton-ai-presentation-generator-post?referralCode=20H68q)
+
 Presenton is an open-source AI presentation generator, an alternative to Gamma and Beautiful.ai. Describe a topic or upload a document and it writes the outline, designs the slides and exports PowerPoint or PDF. This template runs Presenton with PostgreSQL, a persistent volume and a login that is always on.
 
 ## About Hosting Presenton
