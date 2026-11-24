@@ -1,0 +1,207 @@
+{
+  "name": "Presenton AI Presentation Generator (Postgres)",
+  "idSeed": "Presenton AI Presentation Generator (Postgres)",
+  "description": "Open-source AI slide generator with login, PPTX/PDF export and an API.",
+  "category": "AI/ML",
+  "tags": [
+    "presenton",
+    "presentations",
+    "slides",
+    "pptx",
+    "ai",
+    "gamma-alternative",
+    "postgres",
+    "self-hosted"
+  ],
+  "image": "https://cdn.jsdelivr.net/gh/presenton/presenton@v0.9.12-beta/electron/build/appx/Square150x150Logo.png",
+  "upstream": {
+    "repo": "presenton/presenton",
+    "version": "v0.9.12-beta",
+    "license": "Apache-2.0",
+    "images": {
+      "presenton": "ghcr.io/presenton/presenton:v0.9.12-beta@sha256:dd444e4384df0caeb7cb96a26bfa7543a12d2be19c83d661446b2087d09aed54 (released 2026-10-26)",
+      "postgres": "ghcr.io/railwayapp-templates/postgres-ssl:18.6@sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863"
+    },
+    "checked": "2026-11-24"
+  },
+  "services": {
+    "Presenton": {
+      "icon": "https://cdn.jsdelivr.net/gh/presenton/presenton@v0.9.12-beta/electron/build/appx/Square150x150Logo.png",
+      "source": {
+        "repo": "baranberkay96/presenton-railway",
+        "rootDirectory": "/services/presenton"
+      },
+      "startCommand": null,
+      "preDeployCommand": null,
+      "healthcheckPath": "/api/v1/auth/status",
+      "healthcheckTimeout": 900,
+      "restartPolicyType": "ALWAYS",
+      "numReplicas": 1,
+      "cronSchedule": null,
+      "publicDomain": true,
+      "targetPort": 80,
+      "tcpProxy": null,
+      "volume": {
+        "mountPath": "/app_data"
+      },
+      "variables": {
+        "PORT": {
+          "defaultValue": "80",
+          "description": "Port of the image's nginx (fixed at 80).",
+          "required": false
+        },
+        "AUTH_USERNAME": {
+          "defaultValue": "admin",
+          "description": "Admin user name (3+ characters), created on the first start.",
+          "required": false
+        },
+        "AUTH_PASSWORD": {
+          "defaultValue": "${{secret(24, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Admin password (8+ characters). Login is always on.",
+          "required": false
+        },
+        "PRESENTON_PUBLIC_URL": {
+          "defaultValue": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
+          "description": "Public URL used in download, edit and preview links. Change it with a custom domain.",
+          "required": false
+        },
+        "DATABASE_URL": {
+          "defaultValue": "postgresql://${{Postgres.POSTGRES_USER}}:${{Postgres.POSTGRES_PASSWORD}}@${{Postgres.RAILWAY_PRIVATE_DOMAIN}}:5432/${{Postgres.POSTGRES_DB}}",
+          "description": "Postgres for users, presentations and settings (private network).",
+          "required": false
+        },
+        "MIGRATE_DATABASE_ON_STARTUP": {
+          "defaultValue": "true",
+          "description": "Apply database migrations on start.",
+          "required": false
+        },
+        "APP_DATA_DIRECTORY": {
+          "defaultValue": "/app_data",
+          "description": "Exports, images, uploads and fonts (volume).",
+          "required": false
+        },
+        "LLM": {
+          "defaultValue": "",
+          "description": "Optional. Text model provider: openai, anthropic, google, openrouter, deepseek, ollama, custom, ... Leave empty to choose in Settings.",
+          "required": false
+        },
+        "OPENAI_API_KEY": {
+          "defaultValue": "",
+          "description": "Optional. OpenAI key (LLM=openai, also GPT image generation).",
+          "required": false
+        },
+        "ANTHROPIC_API_KEY": {
+          "defaultValue": "",
+          "description": "Optional. Anthropic key (LLM=anthropic).",
+          "required": false
+        },
+        "GOOGLE_API_KEY": {
+          "defaultValue": "",
+          "description": "Optional. Google Gemini key (LLM=google).",
+          "required": false
+        },
+        "OPENROUTER_API_KEY": {
+          "defaultValue": "",
+          "description": "Optional. OpenRouter key (LLM=openrouter).",
+          "required": false
+        },
+        "PEXELS_API_KEY": {
+          "defaultValue": "",
+          "description": "Optional. Pexels key for stock images in slides.",
+          "required": false
+        },
+        "MEM0_ENABLED": {
+          "defaultValue": "false",
+          "description": "Presentation memory (Mem0). Needs an OpenAI-compatible MEM0_LLM_BASE_URL/MEM0_LLM_API_KEY; off by default.",
+          "required": false
+        },
+        "DISABLE_ANONYMOUS_TRACKING": {
+          "defaultValue": "true",
+          "description": "Turn off Presenton's anonymous usage tracking.",
+          "required": false
+        }
+      }
+    },
+    "Postgres": {
+      "icon": "https://devicons.railway.app/i/postgresql.svg",
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:18.6@sha256:4fc833b43d2aaf6ecc9b18615f5533602b723a32d0e2efe2dae8ca0f7217c863"
+      },
+      "startCommand": null,
+      "preDeployCommand": null,
+      "healthcheckPath": null,
+      "healthcheckTimeout": null,
+      "restartPolicyType": "ALWAYS",
+      "numReplicas": 1,
+      "cronSchedule": null,
+      "publicDomain": false,
+      "targetPort": null,
+      "tcpProxy": null,
+      "volume": {
+        "mountPath": "/var/lib/postgresql/data"
+      },
+      "variables": {
+        "PGDATA": {
+          "defaultValue": "/var/lib/postgresql/data/pgdata",
+          "description": "Location where the database will be initialized",
+          "required": false
+        },
+        "PGHOST": {
+          "defaultValue": "${{RAILWAY_PRIVATE_DOMAIN}}",
+          "description": "Railway Private Domain Name.",
+          "required": false
+        },
+        "PGPORT": {
+          "defaultValue": "5432",
+          "description": "Port to connect to Postgres.",
+          "required": false
+        },
+        "PGUSER": {
+          "defaultValue": "${{ POSTGRES_USER }}",
+          "description": "Required variable for Data panel",
+          "required": false
+        },
+        "PGDATABASE": {
+          "defaultValue": "${{POSTGRES_DB}}",
+          "description": "Required variable for the data panel.",
+          "required": false
+        },
+        "PGPASSWORD": {
+          "defaultValue": "${{POSTGRES_PASSWORD}}",
+          "description": "Required variable for Data panel",
+          "required": false
+        },
+        "POSTGRES_DB": {
+          "defaultValue": "railway",
+          "description": "Default database created when image is started.",
+          "required": false
+        },
+        "DATABASE_URL": {
+          "defaultValue": "postgresql://${{PGUSER}}:${{POSTGRES_PASSWORD}}@${{RAILWAY_PRIVATE_DOMAIN}}:5432/${{PGDATABASE}}",
+          "description": "Private connection URL used by Presenton.",
+          "required": false
+        },
+        "POSTGRES_USER": {
+          "defaultValue": "postgres",
+          "description": "User to connect to Postgres DB",
+          "required": false
+        },
+        "SSL_CERT_DAYS": {
+          "defaultValue": "820",
+          "description": "SSL certificate expiry in days.",
+          "required": false
+        },
+        "POSTGRES_PASSWORD": {
+          "defaultValue": "${{ secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\") }}",
+          "description": "Password to connect to DB",
+          "required": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "60",
+          "description": "Allow Postgres to cleanly shut down",
+          "required": false
+        }
+      }
+    }
+  }
+}
