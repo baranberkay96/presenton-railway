@@ -55,7 +55,7 @@ Users, presentations and provider settings live in PostgreSQL; exports, uploaded
 
 **Versions.** The image is pinned in `services/presenton/Dockerfile` (`PRESENTON_IMAGE`, tag and digest). Presenton is pre-1.0: read the release notes and back up Postgres before upgrading.
 
-**Resources.** About 0.6-0.9 GB RAM at idle and more while exporting (Chromium). Hobby or Pro is recommended; Trial's 1 GB per service is tight during exports.
+**Resources.** Measured idle: Presenton about 0.58 GB RAM, Postgres 0.1 GB; exports (Chromium) need more. Hobby or Pro is recommended; Trial's 1 GB per service is tight during exports.
 
 ### Why Deploy Presenton on Railway?
 

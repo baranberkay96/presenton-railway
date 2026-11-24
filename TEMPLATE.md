@@ -33,7 +33,14 @@ Market (2026-11): leader "Presenton - AI Presentations and API" 232 active on `g
 
 ## Resources
 
-See "Measured" below. Prices: RAM $10/GB-month, vCPU $20/month, volume $0.15/GB-month. Minimum plan: Hobby recommended (exports start Chromium).
+Measured on Railway 2026-11-24 (idle after login; Presenton also re-run under a 1 GB limit):
+
+| Service | RAM | CPU |
+|---|---|---|
+| Presenton | 0.57-0.59 GB idle (fits a 1 GB limit); Chromium exports add more | ~0.01 vCPU idle |
+| Postgres | 0.09-0.10 GB | ~0 |
+
+Total ≈ 0.7 GB idle ≈ **$7-9/month** plus volumes. Prices: RAM $10/GB-month, vCPU $20/month, volume $0.15/GB-month. Minimum plan: Hobby recommended (exports start Chromium; Trial's 1 GB is tight then).
 
 ## Verification checklist
 
@@ -41,7 +48,9 @@ See "Measured" below. Prices: RAM $10/GB-month, vCPU $20/month, volume $0.15/GB-
 2. Setup endpoint `POST /api/v1/auth/setup` → 409 (already configured); login with generated credentials 200; wrong password 401.
 3. With a model key: generate a short deck, export PPTX and PDF.
 4. Redeploy: login unchanged, exports still in `/app_data`.
-5. `AUTH_PASSWORD=abc` → SUCCESS with warning, login locked; a valid password afterwards unlocks it.
+5. `AUTH_PASSWORD=abc` → SUCCESS with warning (existing admin keeps the old password); a valid password afterwards is applied once (`Recovered bootstrap administrator credentials`) and works.
+
+Tested 2026-11-24 on Railway: 1, 2 (setup 409, wrong password 401, `/api/v1/ppt/presentation/all` 401 without login, 200 with), 4, 5; `/app_data/*`, `/docs`, `/api/v2/` and `/mcp` answer 401 without login. Not tested: deck generation and PPTX/PDF export (needs a model key).
 
 ## Open questions
 
